@@ -1,1 +1,15 @@
+# macOS system files
+.DS_Store
+**/.DS_Store
 
+# WordPress specific ignores
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+*.log
+.htaccess
+
+# Other common ignores
+node_modules/
+vendor/
+.env
