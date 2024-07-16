@@ -13,3 +13,4 @@ wp-content/cache/
 node_modules/
 vendor/
 .env
+ai-workout-generator/app/sql/local.sql
