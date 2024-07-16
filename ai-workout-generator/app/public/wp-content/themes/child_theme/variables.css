@@ -1,0 +1,118 @@
+:root {
+    /* Colors */
+    --color-primary: #ddff0e;
+    --color-primary-dark: #b8d40c;
+    --color-secondary: #f72585;
+    --color-tertiary: #3a0ca3;
+    --color-background: #2a2d2e;
+    --color-background-light: #3c3f41;
+    --color-text: #ffffff;
+    --color-text-muted: #b0b0b0;
+    --color-error: #ff3d00;
+    
+    /* Typography */
+    --font-main: 'Roboto', sans-serif;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-size-base: 16px;
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h3: 1.75rem;
+    --font-size-h4: 1.5rem;
+    --line-height-base: 1.6;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+    
+    /* Border Radii */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    
+    /* Transitions */
+    --transition-speed: 0.3s;
+    
+    /* Outline Effect */
+    --outline-width: 2px;
+    --outline-offset: 2px;
+    --outline-color: var(--color-secondary);
+    --outline-shadow-opacity: 0.2;
+    
+    /* Z-index Layers */
+    --z-index-base: 1;
+    --z-index-dropdown: 1000;
+    --z-index-sticky: 1020;
+    --z-index-fixed: 1030;
+    --z-index-modal-backdrop: 1040;
+    --z-index-modal: 1050;
+    --z-index-popover: 1060;
+    --z-index-tooltip: 1070;
+    
+    /* Dashboard Layout */
+    --dashboard-max-width: 1200px;
+    --dashboard-padding: 2rem;
+    --dashboard-gap: 2rem;
+    --section-padding: 1.5rem;
+    --section-margin-bottom: 2rem;
+    --header-margin-bottom: 2rem;
+    
+    /* Responsive Breakpoints */
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    
+    /* Button Dimensions */
+    --button-size: 30px;
+    --button-font-size: 1.5rem;
+    
+    /* Form Elements */
+    --input-padding: 0.75rem;
+    --input-margin-bottom: 1rem;
+    
+    /* Animations */
+    --animation-duration: 0.5s;
+    
+    /* Tabs (for Exercise Progress) */
+    --tab-padding: 10px 15px;
+    --tab-border-width: 2px;
+    --tab-font-weight: 500;
+    
+    /* Chart Dimensions */
+    --chart-height: 300px;
+    --chart-margin-bottom: 1.5rem;
+    
+    /* Exercise Progress Section */
+    --exercise-progress-padding: var(--section-padding);
+    --exercise-progress-margin-bottom: var(--section-margin-bottom);
+    --exercise-progress-border-radius: var(--border-radius-md);
+    
+    /* Mobile Adjustments */
+    --section-padding-mobile: 1rem;
+    --dashboard-padding-mobile: 1rem;
+}
+    --input-padding: 0.75rem;
+    --input-margin-bottom: 1rem;
+    
+    /* Animations */
+    --animation-duration: 0.5s;
+    
+    /* Tabs (for Exercise Progress) */
+    --tab-padding: 10px 15px;
+    --tab-border-width: 2px;
+    --tab-font-weight: 500;
+    
+    /* Chart Dimensions */
+    --chart-height: 300px;
+    --chart-margin-bottom: 1.5rem;
+    
+    /* Exercise Progress Section */
+    --exercise-progress-padding: var(--section-padding);
+    --exercise-progress-margin-bottom: var(--section-margin-bottom);
+    --exercise-progress-border-radius: var(--border-radius-md);
+    
+    /* Mobile Adjustments */
+    --section-padding-mobile: 1rem;
+    --dashboard-padding-mobile: 1rem;
+}

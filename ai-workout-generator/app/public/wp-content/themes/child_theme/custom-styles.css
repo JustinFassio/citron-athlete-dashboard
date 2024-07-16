@@ -1,0 +1,577 @@
+/* Custom styles for Athlete Dashboard */
+@import url("variables.css");
+
+/* --------------------------------------------------------------------------
+   Global Styles
+   -------------------------------------------------------------------------- */
+body {
+    font-family: var(--font-main);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: var(--line-height-base);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+a:hover, a:focus {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Dashboard Layout
+   -------------------------------------------------------------------------- */
+.athlete-dashboard {
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--dashboard-padding);
+    margin: 2rem auto;
+    max-width: var(--dashboard-max-width);
+}
+
+.dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dashboard-gap);
+}
+
+.dashboard-row {
+    display: flex;
+    gap: var(--dashboard-gap);
+    width: 100%;
+}
+
+.dashboard-section {
+    background-color: var(--color-background);
+    border-radius: var(--border-radius-md);
+    padding: var(--section-padding);
+    border: 1px solid var(--color-primary-dark);
+    transition: all var(--transition-speed);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.half-width {
+    width: calc(50% - (var(--dashboard-gap) / 2));
+}
+
+/* Section Styling */
+.dashboard-section h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-primary-dark);
+}
+
+/* Active Section Styling */
+.dashboard-section.active {
+    outline: var(--outline-width) solid var(--color-secondary);
+    outline-offset: var(--outline-offset);
+    box-shadow: 0 0 0 var(--outline-offset) rgba(247, 37, 133, var(--outline-shadow-opacity));
+}
+
+/* --------------------------------------------------------------------------
+   Welcome Banner Styles
+   -------------------------------------------------------------------------- */
+.welcome-banner {
+    background: var(--color-background-light);
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    border-image-slice: 1;
+    padding: 0.75rem 0;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-icon {
+    font-size: 1.75rem;
+    color: var(--color-primary);
+}
+
+.welcome-message {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    color: var(--color-text);
+    font-size: 1.1rem;
+}
+
+.welcome-message strong {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.welcome-toggle {
+    background: none;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.welcome-toggle:hover {
+    color: var(--color-primary);
+}
+
+.welcome-banner.minimized .welcome-toggle {
+    transform: rotate(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   Toggle Button Styles
+   -------------------------------------------------------------------------- */
+.toggle-btn {
+    background: var(--color-primary);
+    border: none;
+    color: var(--color-background);
+    font-size: var(--button-font-size);
+    cursor: pointer;
+    width: var(--button-size);
+    height: var(--button-size);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all var(--transition-speed);
+}
+
+.toggle-btn:hover, .toggle-btn:focus {
+    background: var(--color-primary-dark);
+    transform: rotate(90deg);
+}
+
+.toggle-btn.active {
+    background-color: var(--color-secondary);
+}
+
+.section-content {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Form Styles
+   -------------------------------------------------------------------------- */
+.custom-form input:not([type="submit"]),
+.custom-form select,
+.custom-form textarea {
+    width: 100%;
+    padding: var(--input-padding);
+    margin-bottom: var(--input-margin-bottom);
+    border: 1px solid var(--color-primary-dark);
+    background-color: var(--color-background-light);
+    color: var(--color-text);
+    border-radius: var(--border-radius-sm);
+}
+
+.custom-form input[type="submit"],
+.custom-button {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    padding: var(--input-padding) calc(var(--input-padding) * 2);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+.custom-form input[type="submit"]:hover,
+.custom-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Progress Chart Styles
+   -------------------------------------------------------------------------- */
+.progress-chart-container {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 1;  /* Adjust this ratio as needed */
+    margin-bottom: var(--chart-margin-bottom, 1.5rem);
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-sm);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+#progressChart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* --------------------------------------------------------------------------
+   Progress Form Styles
+   -------------------------------------------------------------------------- */
+.progress-input-form,
+.exercise-progress-form {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--color-background-light);
+    border-radius: var(--border-radius-sm);
+}
+
+.progress-input-form .form-group,
+.exercise-progress-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.progress-input-form label,
+.exercise-progress-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+.weight-input-group {
+    display: flex;
+    align-items: center;
+}
+
+.weight-input-group input[type="number"] {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+}
+
+.weight-input-group select {
+    width: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Exercise Progress Section Styles
+   -------------------------------------------------------------------------- */
+#exercise-progress.dashboard-section {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#exercise-progress .ui-tabs {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+#exercise-progress .ui-tabs-nav {
+    background: none;
+    border: none;
+    border-bottom: 2px solid var(--color-primary-dark);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+#exercise-progress .ui-tabs-nav li {
+    background: none;
+    border: none;
+    margin: 0 4px 4px 0;
+}
+
+#exercise-progress .ui-tabs-nav li a {
+    color: var(--color-text);
+    padding: 10px 15px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    transition: all var(--transition-speed);
+    border-radius: var(--border-radius-sm);
+}
+
+#exercise-progress .ui-tabs-nav li.ui-tabs-active a,
+#exercise-progress .ui-tabs-nav li a:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+#exercise-progress .ui-tabs-panel {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-primary-dark);
+    border-radius: var(--border-radius-sm);
+    padding: var(--section-padding);
+    margin-top: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Comprehensive Body Composition Section Styles
+   -------------------------------------------------------------------------- */
+#comprehensive-body-composition .chart-container {
+    margin-bottom: 2rem;
+}
+
+#comprehensive-body-composition .data-input-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#comprehensive-body-composition .date-range-form,
+#comprehensive-body-composition .body-composition-form {
+    width: 48%;
+    background-color: var(--color-background-light);
+    padding: 1rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+#comprehensive-body-composition h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--color-primary);
+}
+
+#comprehensive-body-composition .form-group {
+    margin-bottom: 1rem;
+}
+
+#comprehensive-body-composition label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+#comprehensive-body-composition input[type="date"],
+#comprehensive-body-composition input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-primary-dark);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-background);
+    color: var(--color-text);
+}
+
+#comprehensive-body-composition .custom-button {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#comprehensive-body-composition .custom-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+@media (max-width: 768px) {
+    #comprehensive-body-composition .date-range-form,
+    #comprehensive-body-composition .body-composition-form {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Account Details Styles
+   -------------------------------------------------------------------------- */ 
+.user-profile {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-picture {
+    flex-shrink: 0;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-primary);
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-info p {
+    margin-bottom: 0.5rem;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+#change-avatar {
+    display: block;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.logout-button {
+    background-color: var(--color-secondary);
+}
+
+.logout-button:hover {
+    background-color: var(--color-secondary-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility Improvements
+   -------------------------------------------------------------------------- */
+.athlete-dashboard input:focus,
+.athlete-dashboard select:focus,
+.athlete-dashboard textarea:focus,
+.athlete-dashboard button:focus,
+.athlete-dashboard a:focus {
+    outline: var(--outline-width) solid var(--outline-color);
+    outline-offset: var(--outline-offset);
+}
+
+/* --------------------------------------------------------------------------
+   Animations
+   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.dashboard-section {
+    animation: fadeIn var(--animation-duration) ease-in-out;
+}
+
+/* --------------------------------------------------------------------------
+   Custom Scrollbar
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-dark);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Design
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .welcome-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.75rem 1rem;
+    }
+
+    .welcome-toggle {
+        margin-top: 0.5rem;
+    }
+
+    .dashboard-row {
+        flex-direction: column;
+    }
+
+    .half-width {
+        width: 100%;
+    }
+
+    .athlete-dashboard {
+        padding: var(--dashboard-padding-mobile, 1rem);
+    }
+
+    .dashboard-section,
+    #exercise-progress.dashboard-section {
+        padding: var(--section-padding-mobile, 1rem);
+    }
+
+    #exercise-progress .ui-tabs-nav {
+        flex-direction: column;
+    }
+
+    #exercise-progress .ui-tabs-nav li {
+        margin-bottom: 4px;
+    }
+
+    #exercise-progress .ui-tabs-nav li a {
+        display: block;
+        text-align: center;
+    }
+
+    #exercise-progress h2 {
+        padding: 1rem;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Divi Theme Compatibility
+   -------------------------------------------------------------------------- */
+.et_right_sidebar #left-area {
+    padding-right: 0;
+}
+
+#left-area ul, 
+.entry-content ul, 
+.et-l--body ul, 
+.et-l--header ul, 
+.et-l--footer ul, 
+.comment-content ul, 
+body.et-pb-preview #main-content .container ul {
+    padding: 0;
+    line-height: inherit;
+}
+
+.entry-content .athlete-dashboard ul {
+    list-style-type: none;
+}
+
+.et_pb_pagebuilder_layout.single.et_full_width_page:not(.et-tb-has-body) .et_post_meta_wrapper:first-of-type {
+    padding-top: 0;
+}
+
+.et_pb_post {
+    margin-bottom: 0;
+}
+
+.athlete-dashboard {
+    margin-top: 2rem;
+}
+
+@media (min-width: 981px) {
+    .container,
+    .et_pb_row,
+    .et_pb_slider .et_pb_container,
+    .et_pb_fullwidth_section .et_pb_title_container,
+    .et_pb_fullwidth_section .et_pb_title_featured_container {
+        max-width: 1400px;
+    }
+}
