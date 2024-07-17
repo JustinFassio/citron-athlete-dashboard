@@ -422,6 +422,7 @@ jQuery(document).ready(function($) {
         $('#comprehensive-body-composition-form').on('submit', function(e) {
             e.preventDefault();
             const formData = $(this).serializeArray();
+            console.log('Form data:', formData);
             formData.push(
                 { name: 'action', value: 'store_comprehensive_body_composition_progress' },
                 { name: 'nonce', value: nonce }
@@ -432,6 +433,7 @@ jQuery(document).ready(function($) {
                 type: 'POST',
                 data: formData,
                 success: function(response) {
+                    console.log('AJAX response:', response);
                     if (response.success) {
                         alert(response.data.message);
                         updateComprehensiveBodyCompositionChart();

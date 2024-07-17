@@ -84,8 +84,11 @@ function sanitize_and_validate_body_composition_entry($entry) {
  * @return array Result of the operation
  */
 function store_user_body_composition_progress($user_id, $entry) {
+    error_log('Attempting to store data for user ' . $user_id . ': ' . print_r($entry, true));
+    
     $result = sanitize_and_validate_body_composition_entry($entry);
     if (!empty($result['errors'])) {
+        error_log('Validation errors: ' . print_r($result['errors'], true));
         return array('success' => false, 'errors' => $result['errors']);
     }
 
@@ -107,7 +110,8 @@ function store_user_body_composition_progress($user_id, $entry) {
         return strtotime($b['date']) - strtotime($a['date']);
     });
 
-    update_user_meta($user_id, 'body_composition_progress', $progress);
+    $updated = update_user_meta($user_id, 'body_composition_progress', $progress);
+    error_log('User meta update result: ' . ($updated ? 'success' : 'failure'));
 
     return array('success' => true, 'message' => __('Progress updated successfully', 'athlete-dashboard'));
 }
@@ -154,37 +158,6 @@ function get_user_body_composition_progress($user_id, $start_date = null, $end_d
 }
 
 /**
- * Delete a specific body composition progress entry for a user
- *
- * @param integer $user_id The ID of the user
- * @param string $entry_date The date of the entry to delete
- * @return array Result of the operation
- */
-function delete_user_body_composition_progress_entry($user_id, $entry_date) {
-    $progress = get_user_meta($user_id, 'body_composition_progress', true);
-    
-    if (!is_array($progress)) {
-        return array('success' => false, 'message' => __('No progress data found', 'athlete-dashboard'));
-    }
-
-    $updated_progress = array_filter($progress, function($entry) use ($entry_date) {
-        return $entry['date'] !== $entry_date;
-    });
-
-    if (count($updated_progress) === count($progress)) {
-        return array('success' => false, 'message' => __('Progress entry not found', 'athlete-dashboard'));
-    }
-
-    $updated = update_user_meta($user_id, 'body_composition_progress', $updated_progress);
-
-    if ($updated) {
-        return array('success' => true, 'message' => __('Progress entry deleted successfully', 'athlete-dashboard'));
-    } else {
-        return array('success' => false, 'message' => __('Failed to delete progress entry', 'athlete-dashboard'));
-    }
-}
-
-/**
  * AJAX handler for retrieving body composition progress data
  */
 function handle_get_body_composition_progress_ajax() {
@@ -224,15 +197,16 @@ function handle_get_body_composition_progress_ajax() {
 
     wp_send_json_success($chart_data);
 }
-add_action('wp_ajax_get_body_composition_progress', 'handle_get_body_composition_progress_ajax');
 
 /**
  * AJAX handler for storing body composition progress data
  */
 function handle_store_body_composition_progress_ajax() {
     if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'athlete_dashboard_nonce')) {
-        wp_send_json_error(__('Invalid nonce', 'athlete-dashboard'));
+        wp_send_json_error(['message' => 'Invalid nonce']);
     }
+
+    error_log('Received body composition data: ' . print_r($_POST, true));
 
     $user_id = get_current_user_id();
     $entry = array(
@@ -252,89 +226,6 @@ function handle_store_body_composition_progress_ajax() {
         wp_send_json_error($result);
     }
 }
-add_action('wp_ajax_store_body_composition_progress', 'handle_store_body_composition_progress_ajax');
-
-/**
- * Migrate old weight progress data to the new body composition format
- *
- * @return string Migration result message
- */
-function migrate_body_composition_data() {
-    $users = get_users(array('fields' => 'ID'));
-    $migration_log = array();
-
-    foreach ($users as $user_id) {
-        $old_progress = get_user_meta($user_id, 'weight_progress', true);
-        $new_progress = array();
-
-        if (is_array($old_progress)) {
-            foreach ($old_progress as $entry) {
-                $new_entry = array(
-                    'date' => $entry['date'],
-                    'weight' => floatval($entry['weight']),
-                    'body_fat_percentage' => null,
-                    'muscle_mass' => null,
-                    'bmi' => null
-                );
-                $new_progress[] = $new_entry;
-            }
-
-            update_user_meta($user_id, 'body_composition_progress', $new_progress);
-            delete_user_meta($user_id, 'weight_progress');
-            $migration_log[] = sprintf(__("User ID %d: Migrated %d entries.", 'athlete-dashboard'), $user_id, count($new_progress));
-        } else {
-            $migration_log[] = sprintf(__("User ID %d: No weight progress data found.", 'athlete-dashboard'), $user_id);
-        }
-    }
-
-    $log_file_path = WP_CONTENT_DIR . '/body_composition_migration_log.txt';
-    file_put_contents($log_file_path, implode("\n", $migration_log));
-
-    return sprintf(__("Migration completed. Log file created at %s", 'athlete-dashboard'), $log_file_path);
-}
-
-/**
- * Rollback the body composition data migration
- *
- * @return string Rollback result message
- */
-function rollback_body_composition_migration() {
-    $users = get_users(array('fields' => 'ID'));
-    $rollback_log = array();
-
-    foreach ($users as $user_id) {
-        $new_progress = get_user_meta($user_id, 'body_composition_progress', true);
-        $old_progress = array();
-
-        if (is_array($new_progress)) {
-            foreach ($new_progress as $entry) {
-                $old_entry = array(
-                    'date' => $entry['date'],
-                    'weight' => $entry['weight'],
-                    'unit' => 'kg'
-                );
-                $old_progress[] = $old_entry;
-            }
-
-            update_user_meta($user_id, 'weight_progress', $old_progress);
-            delete_user_meta($user_id, 'body_composition_progress');
-            $rollback_log[] = sprintf(__("User ID %d: Rolled back %d entries.", 'athlete-dashboard'), $user_id, count($old_progress));
-        } else {
-            $rollback_log[] = sprintf(__("User ID %d: No body composition progress data found.", 'athlete-dashboard'), $user_id);
-        }
-    }
-
-    $log_file_path = WP_CONTENT_DIR . '/body_composition_rollback_log.txt';
-    file_put_contents($log_file_path, implode("\n", $rollback_log));
-
-    return sprintf(__("Rollback completed. Log file created at %s", 'athlete-dashboard'), $log_file_path);
-}
-
-// Uncomment the following line to run the migration
-// echo migrate_body_composition_data();
-
-// Uncomment the following line to run the rollback if needed
-// echo rollback_body_composition_migration();
 
 /**
  * Get the most recent weight for a user
@@ -368,84 +259,8 @@ function handle_get_most_recent_weight_ajax() {
         wp_send_json_error('No weight data found');
     }
 }
+
+// Add AJAX action hooks
+add_action('wp_ajax_get_body_composition_progress', 'handle_get_body_composition_progress_ajax');
+add_action('wp_ajax_store_body_composition_progress', 'handle_store_body_composition_progress_ajax');
 add_action('wp_ajax_get_most_recent_weight', 'handle_get_most_recent_weight_ajax');
-
-/**
- * Get exercise tests data
- *
- * @return array Array of exercise tests with their details
- */
-function get_exercise_tests() {
-    return array(
-        '5k_run' => array('label' => '5k Run', 'unit' => 'minutes', 'decimal_places' => 2),
-        '20k_cycling' => array('label' => '20k Cycling', 'unit' => 'minutes', 'decimal_places' => 2),
-        '10k_rucking' => array('label' => '10k Rucking', 'unit' => 'minutes', 'decimal_places' => 2),
-        '400m_swim' => array('label' => '400m Swim', 'unit' => 'seconds', 'decimal_places' => 1),
-        'slrdl' => array('label' => 'Single-Leg Romanian Deadlift', 'unit' => 'reps', 'decimal_places' => 0),
-        'pistol_squat' => array('label' => 'Single-Leg Squat', 'unit' => 'reps', 'decimal_places' => 0),
-        'pushups' => array('label' => 'Push-Ups', 'unit' => 'reps', 'decimal_places' => 0),
-        'pullups' => array('label' => 'Pull-Ups', 'unit' => 'reps', 'decimal_places' => 0),
-        'vertical_jump' => array('label' => 'Vertical Jump', 'unit' => 'inches', 'decimal_places' => 1),
-        'sit_reach' => array('label' => 'Sit-and-Reach', 'unit' => 'inches', 'decimal_places' => 1),
-        'balance_test' => array('label' => 'Single-Leg Balance', 'unit' => 'seconds', 'decimal_places' => 1),
-        'farmers_walk' => array('label' => 'Loaded Carry', 'unit' => 'meters', 'decimal_places' => 1),
-        'burpee_test' => array('label' => 'Burpee Test', 'unit' => 'reps', 'decimal_places' => 0),
-        'deadhang' => array('label' => 'Deadhang', 'unit' => 'seconds', 'decimal_places' => 1)
-    );
-}
-
-/**
- * AJAX handler for exercise progress submission
- */
-function handle_exercise_progress_submission() {
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'athlete_dashboard_nonce')) {
-        wp_send_json_error('Invalid nonce');
-    }
-    $user_id = get_current_user_id();
-    $exercise_key = sanitize_text_field($_POST['exercise_key']);
-    $value = floatval($_POST['value']);
-    $date = sanitize_text_field($_POST['date']);
-    
-    $progress = get_user_meta($user_id, "{$exercise_key}_progress", true);
-    if (!is_array($progress)) $progress = array();
-    
-    // Add new data point
-    $progress[] = array(
-        'date' => $date,
-        'value' => $value
-    );
-    
-    // Sort progress by date
-    usort($progress, function($a, $b) {
-        return strtotime($a['date']) - strtotime($b['date']);
-    });
-    
-    update_user_meta($user_id, "{$exercise_key}_progress", $progress);
-    
-    // Update the most recent value in user profile
-    update_user_meta($user_id, $exercise_key, $value);
-    
-    wp_send_json_success('Progress updated successfully');
-}
-add_action('wp_ajax_handle_exercise_progress_submission', 'handle_exercise_progress_submission');
-
-/**
- * AJAX handler for getting exercise progress
- */
-function handle_get_exercise_progress() {
-    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'athlete_dashboard_nonce')) {
-        wp_send_json_error('Invalid nonce');
-    }
-    $user_id = get_current_user_id();
-    $exercise_key = sanitize_text_field($_POST['exercise_key']);
-    
-    $progress = get_user_meta($user_id, "{$exercise_key}_progress", true);
-    
-    if (!is_array($progress)) {
-        $progress = array();
-    }
-    wp_send_json_success($progress);
-}
-add_action('wp_ajax_get_exercise_progress', 'handle_get_exercise_progress');
-
-?>
