@@ -1,34 +1,41 @@
-File Name,Direct Dependencies,Indirect Dependencies,Dependents,External Libraries,WordPress Core Dependencies,Notes
-style.css,"variables.css, Divi parent theme style.css",None,All PHP files,None,None,"Main stylesheet, sets up basic theme structure and imports variables"
-functions.php,Divi parent theme functions.php,None,All theme files,None,"wp-includes/*, wp-admin/*, wp-includes/user.php, wp-includes/plugin.php","Central file for theme setup, handles enqueuing of styles and scripts"
-custom-styles.css,variables.css,None,All PHP files that output HTML,None,None,"Additional styles, uses variables for consistent theming"
-js/custom-scripts.js,functions.php,None,"athlete-dashboard.php, custom-login.php, custom-registration.php","jQuery, jQuery UI Core, jQuery UI Tabs, Chart.js",wp-includes/script-loader.php,Handles dynamic functionality and AJAX interactions
-athlete-dashboard.php,"functions.php, custom-styles.css, js/custom-scripts.js, includes/data-processing.php",variables.css,None (template file),None,"wp-includes/user.php, wp-includes/meta.php","Main dashboard template, integrates various components"
-variables.css,None,None,"style.css, custom-styles.css, All PHP files with inline styles",None,None,Defines color variables and other theme-wide style variables
-custom-login.php,"functions.php, custom-styles.css, js/custom-scripts.js",variables.css,None (standalone template),None,"wp-includes/user.php, wp-includes/general-template.php",Custom login page template
-custom-registration.php,"functions.php, custom-styles.css, js/custom-scripts.js",variables.css,None (standalone template),None,"wp-includes/user.php, wp-includes/general-template.php",Custom registration page template
-includes/data-processing.php,functions.php,None,"athlete-dashboard.php, js/custom-scripts.js",None,"wp-includes/user.php, wp-includes/meta.php, wp-includes/class-wp-error.php",Handles data processing and AJAX requests
-,,,,,,
-Optimization Notes,,,,,,
-1. CSS Consolidation,"Consider merging style.css, custom-styles.css, and variables.css to reduce HTTP requests",,,,,
-2. JavaScript Optimization,"Evaluate necessity of all jQuery UI components, potentially remove unused ones",,,,,
-3. Conditional Loading,Implement conditional loading for Chart.js only on pages where it's needed,,,,,
-4. functions.php Modularization,"Break down functions.php into smaller, purpose-specific files if it becomes too large",,,,,
-5. Build Process,Implement a build process to combine and minify CSS and JavaScript files,,,,,
-6. WordPress Dependency Management,Utilize wp_enqueue_script() more effectively to manage dependencies,,,,,
-7. Critical CSS,Consider implementing critical CSS inlining for above-the-fold content,,,,,
-8. AJAX Optimization,Review and optimize AJAX calls in custom-scripts.js to reduce server load,,,,,
-9. Caching Strategy,Implement intelligent caching for database queries and API calls in data-processing.php,,,,,
-10. Code Splitting,Consider code splitting in custom-scripts.js to load functionality on-demand,,,,,
-,,,,,,
-Additional Notes,,,,,,
-1. Circular Dependencies,"No circular dependencies detected, which is good for maintainability",,,,,
-2. WordPress Core Usage,"Heavy reliance on WordPress core functions, especially in user management - ensure compatibility with future WP versions",,,,,
-3. Divi Theme Dependency,Consider impact of Divi theme updates on child theme functionality,,,,,
-4. Security Considerations,Ensure all data processing and AJAX calls in data-processing.php implement proper security checks,,,,,
-5. Extensibility,"Current structure allows for easy extensibility, especially through functions.php and action/filter hooks",,,,,
-6. Documentation,Maintain inline documentation in all files to explain dependencies and functionality,,,,,
-7. Performance Monitoring,"Implement performance monitoring, especially for database queries in data-processing.php and AJAX calls",,,,,
-8. Responsive Design,Ensure custom-styles.css implements responsive design principles effectively,,,,,
-9. Accessibility,Review all templates and styles for WCAG compliance,,,,,
-10. Version Control,Consider implementing version numbers in file headers for easier tracking of changes,,,,,
+# Athlete Dashboard Dependency Map and Optimization Notes
+
+## Dependency Map
+
+| File Name | Direct Dependencies | Indirect Dependencies | Dependents | External Libraries | WordPress Core Dependencies | Notes |
+|-----------|---------------------|------------------------|------------|--------------------|-----------------------------|-------|
+| style.css | variables.css, Divi parent theme style.css | None | All PHP files | None | None | Main stylesheet, sets up basic theme structure and imports variables |
+| functions.php | Divi parent theme functions.php | None | All theme files | None | wp-includes/*, wp-admin/*, wp-includes/user.php, wp-includes/plugin.php | Central file for theme setup, handles enqueuing of styles and scripts |
+| custom-styles.css | variables.css | None | All PHP files that output HTML | None | None | Additional styles, uses variables for consistent theming |
+| js/custom-scripts.js | functions.php | None | athlete-dashboard.php, custom-login.php, custom-registration.php | jQuery, jQuery UI Core, jQuery UI Tabs, Chart.js | wp-includes/script-loader.php | Handles dynamic functionality and AJAX interactions |
+| athlete-dashboard.php | functions.php, custom-styles.css, js/custom-scripts.js, includes/data-processing.php | variables.css | None (template file) | None | wp-includes/user.php, wp-includes/meta.php | Main dashboard template, integrates various components |
+| variables.css | None | None | style.css, custom-styles.css, All PHP files with inline styles | None | None | Defines color variables and other theme-wide style variables |
+| custom-login.php | functions.php, custom-styles.css, js/custom-scripts.js | variables.css | None (standalone template) | None | wp-includes/user.php, wp-includes/general-template.php | Custom login page template |
+| custom-registration.php | functions.php, custom-styles.css, js/custom-scripts.js | variables.css | None (standalone template) | None | wp-includes/user.php, wp-includes/general-template.php | Custom registration page template |
+| includes/data-processing.php | functions.php | None | athlete-dashboard.php, js/custom-scripts.js | None | wp-includes/user.php, wp-includes/meta.php, wp-includes/class-wp-error.php | Handles data processing and AJAX requests |
+
+## Optimization Notes
+
+1. **CSS Consolidation**: Consider merging style.css, custom-styles.css, and variables.css to reduce HTTP requests
+2. **JavaScript Optimization**: Evaluate necessity of all jQuery UI components, potentially remove unused ones
+3. **Conditional Loading**: Implement conditional loading for Chart.js only on pages where it's needed
+4. **functions.php Modularization**: Break down functions.php into smaller, purpose-specific files if it becomes too large
+5. **Build Process**: Implement a build process to combine and minify CSS and JavaScript files
+6. **WordPress Dependency Management**: Utilize wp_enqueue_script() more effectively to manage dependencies
+7. **Critical CSS**: Consider implementing critical CSS inlining for above-the-fold content
+8. **AJAX Optimization**: Review and optimize AJAX calls in custom-scripts.js to reduce server load
+9. **Caching Strategy**: Implement intelligent caching for database queries and API calls in data-processing.php
+10. **Code Splitting**: Consider code splitting in custom-scripts.js to load functionality on-demand
+
+## Additional Notes
+
+1. **Circular Dependencies**: No circular dependencies detected, which is good for maintainability
+2. **WordPress Core Usage**: Heavy reliance on WordPress core functions, especially in user management - ensure compatibility with future WP versions
+3. **Divi Theme Dependency**: Consider impact of Divi theme updates on child theme functionality
+4. **Security Considerations**: Ensure all data processing and AJAX calls in data-processing.php implement proper security checks
+5. **Extensibility**: Current structure allows for easy extensibility, especially through functions.php and action/filter hooks
+6. **Documentation**: Maintain inline documentation in all files to explain dependencies and functionality
+7. **Performance Monitoring**: Implement performance monitoring, especially for database queries in data-processing.php and AJAX calls
+8. **Responsive Design**: Ensure custom-styles.css implements responsive design principles effectively
+9. **Accessibility**: Review all templates and styles for WCAG compliance
+10. **Version Control**: Consider implementing version numbers in file headers for easier tracking of changes
